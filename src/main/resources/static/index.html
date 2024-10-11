@@ -88,7 +88,11 @@
     }
   };
 
-  const card = elements.create("card", { style: style });
+  // Create a Card Element with postal code field hidden
+  const card = elements.create("card", {
+    style: style,
+    hidePostalCode: true // Hides the postal code field
+  });
   card.mount("#card-element");
 
   // Handle real-time validation errors from the card Element.
