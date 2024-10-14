@@ -63,6 +63,34 @@
 			<scope>test</scope>
 			<!-- Version is inherited from parent -->
 		</dependency>
+
+		<!-- Add these dependencies within the <dependencies> section -->
+
+		<!-- MySQL Connector -->
+		<!-- MySQL Connector -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+			<scope>runtime</scope>
+		</dependency>
+
+
+		<!-- Spring Data JPA -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- H2 Database (For Testing) -->
+		<!--
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+		-->
+
 	</dependencies>
 
 	<build>

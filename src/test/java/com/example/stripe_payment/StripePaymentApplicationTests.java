@@ -9,5 +9,4 @@ class StripePaymentApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
