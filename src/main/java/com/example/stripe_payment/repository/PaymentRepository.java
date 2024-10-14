@@ -1,10 +1,12 @@
 package com.example.stripe_payment.repository;
 
-import com.example.stripe_payment.model.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.example.stripe_payment.model.Payment;
+import java.util.Optional;
 
-@Repository
+// Extend JpaRepository with your Payment entity and the type of its primary key (Long, Integer, etc.)
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
-    // Additional query methods if needed
+
+    // Add this method to search for a payment by email
+    Optional<Payment> findByEmail(String email);
 }
