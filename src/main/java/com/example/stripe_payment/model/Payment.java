@@ -1,8 +1,8 @@
 package com.example.stripe_payment.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import java.time.LocalDateTime;
@@ -16,25 +16,23 @@ public class Payment {
     private Long id;
 
     private String email;
-
     private LocalDateTime dateTime;
-
     private String paymentStatus;
+    private String accountStatus;  // This field tracks active/inactive status
 
-    // Constructors
-    public Payment() {
-        // Default constructor
-    }
+    // Constructors, Getters, and Setters
 
-    public Payment(String email, LocalDateTime dateTime, String paymentStatus) {
+    public Payment() {}
+
+    public Payment(String email, LocalDateTime dateTime, String paymentStatus, String accountStatus) {
         this.email = email;
         this.dateTime = dateTime;
         this.paymentStatus = paymentStatus;
+        this.accountStatus = accountStatus;
     }
 
     // Getters and Setters
 
-    // Getters
     public Long getId() {
         return id;
     }
@@ -51,9 +49,16 @@ public class Payment {
         return paymentStatus;
     }
 
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public void setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public void setEmail(String email) {
@@ -62,9 +67,5 @@ public class Payment {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
     }
 }

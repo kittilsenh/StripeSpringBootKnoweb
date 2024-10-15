@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -44,7 +44,6 @@ public class PaymentController {
             Map<String, Object> responseData = new HashMap<>();
             responseData.put("clientSecret", paymentIntent.getClientSecret());
 
-            // Don't save the payment yet, only after confirmation
             return ResponseEntity.ok(responseData);
         } catch (StripeException e) {
             Map<String, Object> errorData = new HashMap<>();
@@ -53,21 +52,39 @@ public class PaymentController {
         }
     }
 
-
     @PostMapping("/update-payment-status")
     public ResponseEntity<String> updatePaymentStatus(@RequestBody Map<String, String> data) {
         String email = data.get("email");
         String status = data.get("status");
 
-        // Save the payment only when we have a final status (Success or Fail)
+        // Create and save the new payment
         Payment payment = new Payment();
         payment.setEmail(email);
         payment.setDateTime(LocalDateTime.now());
         payment.setPaymentStatus(status);
+
+        // Set account status based on payment status
+        if (status.equals("Success")) {
+            // Always set account status to "active" when payment is "Success"
+            payment.setAccountStatus("active");
+        } else if (status.equals("Fail")) {
+            // Check for recent successful payments to decide if account stays active or inactive
+            LocalDateTime thirtyDaysAgo = LocalDateTime.now().minusDays(30);
+            List<Payment> recentSuccessPayments = paymentRepository.findByEmailAndPaymentStatusAndDateTimeAfter(
+                    email, "Success", thirtyDaysAgo);
+
+            if (!recentSuccessPayments.isEmpty()) {
+                // Keep account active if there was a successful payment recently
+                payment.setAccountStatus("active");
+            } else {
+                // Otherwise, mark the account as inactive
+                payment.setAccountStatus("inactive");
+            }
+        }
+
+        // Save the current payment
         paymentRepository.save(payment);
 
-        System.out.println("Payment status for email " + email + " updated to " + status);
-        return ResponseEntity.ok("Payment status updated");
+        return ResponseEntity.ok("Payment status updated to " + status);
     }
-
 }
